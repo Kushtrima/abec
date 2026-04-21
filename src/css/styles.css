@@ -384,7 +384,7 @@ body { -webkit-font-smoothing: antialiased; }
       rgba(227, 6, 19, 0.08) 35%,
       transparent 70%),
     #000;
-  animation: menuFadeIn 0.25s ease;
+  animation: menuFadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
 }
 @keyframes menuFadeIn {
@@ -485,3 +485,17 @@ body { -webkit-font-smoothing: antialiased; }
   color: #fff;
 }
 body.menu-open { overflow: hidden; }
+
+/* When the mobile menu is open, remove the scrolled-header's backdrop-filter.
+   `backdrop-filter` makes the header a containing block for position:fixed
+   descendants, which would trap the overlay inside the header bar instead of
+   letting it cover the whole viewport. */
+body.menu-open #site-header.is-scrolled {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+/* Also kill the header's 300ms transition while the menu is open so the
+   filter removal is instant — otherwise the overlay appears with a delay. */
+body.menu-open #site-header {
+  transition: none !important;
+}
