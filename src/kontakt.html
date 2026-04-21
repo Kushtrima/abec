@@ -27,6 +27,44 @@
   <meta name="twitter:description" content="Sprechen Sie mit ABEC Fassadenbau GmbH. Beratung anfordern, Offerte einholen oder Fragen stellen." />
   <meta name="twitter:image" content="https://kushtrima.github.io/abec/assets/contact.webp" />
 
+  <!-- Preload hero image for LCP -->
+  <link rel="preload" as="image" href="assets/contact.webp" />
+
+  <!-- BreadcrumbList + ContactPage schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Startseite", "item": "https://kushtrima.github.io/abec/" },
+          { "@type": "ListItem", "position": 2, "name": "Kontakt", "item": "https://kushtrima.github.io/abec/kontakt.html" }
+        ]
+      },
+      {
+        "@type": "ContactPage",
+        "url": "https://kushtrima.github.io/abec/kontakt.html",
+        "name": "Kontakt · ABEC Fassadenbau GmbH",
+        "mainEntity": {
+          "@type": "LocalBusiness",
+          "name": "ABEC Fassadenbau GmbH",
+          "telephone": "+41447849369",
+          "email": "info@abecfassadenbau.ch",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Etzelstrasse 30",
+            "postalCode": "8808",
+            "addressLocality": "Pfäffikon",
+            "addressRegion": "SZ",
+            "addressCountry": "CH"
+          }
+        }
+      }
+    ]
+  }
+  </script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

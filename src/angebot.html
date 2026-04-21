@@ -28,6 +28,49 @@
   <meta name="twitter:description" content="Design-Fassaden, Sanierung & Energie, Verputz & Dämmung — professionelle Fassadenlösungen aus einer Hand." />
   <meta name="twitter:image" content="https://kushtrima.github.io/abec/assets/hero-angebot.webp" />
 
+  <!-- Preload hero image for LCP -->
+  <link rel="preload" as="image" href="assets/hero-angebot.webp" />
+
+  <!-- Schema: BreadcrumbList + 3 Services -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Startseite", "item": "https://kushtrima.github.io/abec/" },
+          { "@type": "ListItem", "position": 2, "name": "Angebot", "item": "https://kushtrima.github.io/abec/angebot.html" }
+        ]
+      },
+      {
+        "@type": "Service",
+        "name": "Design-Fassaden (Stein & Glas)",
+        "provider": { "@type": "LocalBusiness", "name": "ABEC Fassadenbau GmbH" },
+        "areaServed": { "@type": "AdministrativeArea", "name": "Schweiz" },
+        "description": "Individuelle Lösungen für moderne Architektur mit Naturstein, Glas und filigranen Metallkonstruktionen.",
+        "serviceType": "Fassadenbau"
+      },
+      {
+        "@type": "Service",
+        "name": "Sanierung & Energie",
+        "provider": { "@type": "LocalBusiness", "name": "ABEC Fassadenbau GmbH" },
+        "areaServed": { "@type": "AdministrativeArea", "name": "Schweiz" },
+        "description": "Energetische Fassadensanierung mit Hochleistungsdämmung, steueroptimierte Sanierungskonzepte.",
+        "serviceType": "Fassadensanierung"
+      },
+      {
+        "@type": "Service",
+        "name": "Verputz & Dämmung",
+        "provider": { "@type": "LocalBusiness", "name": "ABEC Fassadenbau GmbH" },
+        "areaServed": { "@type": "AdministrativeArea", "name": "Schweiz" },
+        "description": "Kompaktfassaden, Aussenwärmedämmung (VAWD), mineralische und organische Verputzsysteme.",
+        "serviceType": "Verputzarbeiten"
+      }
+    ]
+  }
+  </script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

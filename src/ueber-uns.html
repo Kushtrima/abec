@@ -27,6 +27,21 @@
   <meta name="twitter:description" content="20 Jahre Fassadenbau. Gegründet 2005 durch Dragan Barac. Handwerk verbunden mit moderner Bautechnik." />
   <meta name="twitter:image" content="https://kushtrima.github.io/abec/assets/uberuns-hero.jpg" />
 
+  <!-- Preload hero image for LCP -->
+  <link rel="preload" as="image" href="assets/uberuns-hero.jpg" />
+
+  <!-- BreadcrumbList schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Startseite", "item": "https://kushtrima.github.io/abec/" },
+      { "@type": "ListItem", "position": 2, "name": "Über uns", "item": "https://kushtrima.github.io/abec/ueber-uns.html" }
+    ]
+  }
+  </script>
+
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
