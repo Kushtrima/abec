@@ -253,11 +253,16 @@
     <div class="max-w-7xl mx-auto px-6 lg:px-12">
       <div class="relative w-full aspect-[21/9] overflow-hidden">
         <iframe
-          src="https://www.google.com/maps?q=Etzelstrasse+30,+8808+Pfäffikon+SZ&output=embed"
+          data-consent-src="https://www.google.com/maps?q=Etzelstrasse+30,+8808+Pfäffikon+SZ&output=embed"
           class="absolute inset-0 w-full h-full border-0"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
           title="Standort ABEC Fassadenbau GmbH"></iframe>
+        <!-- Shown until cookie consent is granted -->
+        <div class="map-placeholder">
+          <p><strong>Google Maps wird erst nach Ihrer Zustimmung geladen.</strong><br />Akzeptieren Sie Cookies, um die Karte anzuzeigen.</p>
+          <button type="button" class="btn-pill-red" onclick="localStorage.setItem('abec-cookie-consent','accepted');location.reload();">Karte laden</button>
+        </div>
       </div>
     </div>
   </section>

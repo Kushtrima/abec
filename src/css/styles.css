@@ -486,6 +486,124 @@ body { -webkit-font-smoothing: antialiased; }
 }
 body.menu-open { overflow: hidden; }
 
+/* ==========================================================================
+   COOKIE CONSENT BANNER
+   ========================================================================== */
+.cookie-banner {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 70;
+  background: #000;
+  border-top: 2px solid #E30613;
+  color: #fff;
+  padding: 1.1rem 1.25rem;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  animation: cookieSlideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes cookieSlideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+.cookie-banner--hidden {
+  transform: translateY(100%);
+  opacity: 0;
+}
+.cookie-banner-inner {
+  max-width: 88rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+}
+@media (min-width: 768px) {
+  .cookie-banner-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+}
+.cookie-banner-text { flex: 1; }
+.cookie-banner-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+.cookie-banner-text p:not(.cookie-banner-title) {
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.85);
+}
+.cookie-banner-text a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+.cookie-banner-text a:hover { color: #E30613; }
+.cookie-banner-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.cookie-btn-reject,
+.cookie-btn-accept {
+  font-family: inherit;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.4rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  white-space: nowrap;
+}
+.cookie-btn-reject {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.cookie-btn-reject:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+}
+.cookie-btn-accept {
+  background: #E30613;
+  color: #fff;
+  border: 1px solid #E30613;
+}
+.cookie-btn-accept:hover {
+  background: #B8050F;
+  border-color: #B8050F;
+}
+
+/* Map consent placeholder (shown while Google Maps is not yet loaded) */
+.map-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  background: #EDEDED;
+  text-align: center;
+}
+.map-placeholder p {
+  font-size: 0.875rem;
+  color: #3D3D3D;
+  max-width: 22rem;
+  line-height: 1.5;
+}
+
 /* When the mobile menu is open, remove the scrolled-header's backdrop-filter.
    `backdrop-filter` makes the header a containing block for position:fixed
    descendants, which would trap the overlay inside the header bar instead of
