@@ -78,87 +78,159 @@
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   // ==========================================================================
-  // COOKIE CONSENT BANNER — gates external services like Google Maps
-  // Stores choice in localStorage. To revoke, clear storage or reload with
-  // ?reset-cookies=1 in the URL.
+  // COOKIE CONSENT MODAL — categorized consent (Notwendig / Statistik / Externe Medien).
+  // Choice stored as JSON in localStorage. Reopen from footer or ?reset-cookies=1.
   // ==========================================================================
   const CONSENT_KEY = 'abec-cookie-consent';
 
-  // Allow reset via ?reset-cookies query param (handy for testing)
+  // Allow reset via ?reset-cookies query param (testing)
   if (window.location.search.includes('reset-cookies')) {
     localStorage.removeItem(CONSENT_KEY);
   }
 
-  const consent = localStorage.getItem(CONSENT_KEY);
-
-  const loadGatedContent = () => {
-    // Swap data-consent-src → src on iframes (Google Maps etc.)
-    document.querySelectorAll('iframe[data-consent-src]').forEach((el) => {
-      el.src = el.dataset.consentSrc;
-      el.removeAttribute('data-consent-src');
-    });
-    // Remove any map placeholders
-    document.querySelectorAll('.map-placeholder').forEach((el) => el.remove());
-
-    // ---------- Analytics (enable by providing the config below) ----------
-    // Plausible (privacy-friendly, no cookies — could also be loaded without
-    // consent, but we defer to consent for consistency):
-    //   injectScript({
-    //     src: 'https://plausible.io/js/script.js',
-    //     defer: true,
-    //     'data-domain': 'your-domain.ch'
-    //   });
-    //
-    // Google Analytics 4:
-    //   injectScript({ src: 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX', async: true });
-    //   window.dataLayer = window.dataLayer || [];
-    //   function gtag(){dataLayer.push(arguments);}
-    //   gtag('js', new Date());
-    //   gtag('config', 'G-XXXXXXXXXX');
+  const readConsent = () => {
+    try {
+      const raw = localStorage.getItem(CONSENT_KEY);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (typeof parsed === 'object' && parsed !== null) return parsed;
+    } catch (_) { /* ignore */ }
+    return null;
   };
 
-  const injectBanner = () => {
-    if (document.getElementById('cookie-banner')) return;
-    const banner = document.createElement('div');
-    banner.id = 'cookie-banner';
-    banner.className = 'cookie-banner';
-    banner.setAttribute('role', 'dialog');
-    banner.setAttribute('aria-label', 'Cookie-Einstellungen');
-    banner.innerHTML = [
-      '<div class="cookie-banner-inner">',
-        '<div class="cookie-banner-text">',
-          '<p class="cookie-banner-title">Wir verwenden Cookies</p>',
-          '<p>Diese Website verwendet Cookies und externe Dienste (z.B. Google Maps), um Ihnen das bestmögliche Erlebnis zu bieten. Details finden Sie in unserer <a href="datenschutz.html">Datenschutzerklärung</a>.</p>',
+  const saveConsent = (choices) => {
+    const payload = { ...choices, essential: true, timestamp: new Date().toISOString() };
+    localStorage.setItem(CONSENT_KEY, JSON.stringify(payload));
+    return payload;
+  };
+
+  const applyConsent = (c) => {
+    if (c.external) {
+      // Swap data-consent-src → src on iframes (Google Maps etc.)
+      document.querySelectorAll('iframe[data-consent-src]').forEach((el) => {
+        el.src = el.dataset.consentSrc;
+        el.removeAttribute('data-consent-src');
+      });
+      document.querySelectorAll('.map-placeholder').forEach((el) => el.remove());
+    }
+    if (c.statistics) {
+      // ---------- Analytics (uncomment & configure when ready) ----------
+      // Plausible:
+      //   var s = document.createElement('script');
+      //   s.defer = true;
+      //   s.setAttribute('data-domain', 'your-domain.ch');
+      //   s.src = 'https://plausible.io/js/script.js';
+      //   document.head.appendChild(s);
+      //
+      // Google Analytics 4:
+      //   var s = document.createElement('script');
+      //   s.async = true;
+      //   s.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
+      //   document.head.appendChild(s);
+      //   window.dataLayer = window.dataLayer || [];
+      //   function gtag(){dataLayer.push(arguments);}
+      //   gtag('js', new Date());
+      //   gtag('config', 'G-XXXXXXXXXX');
+    }
+  };
+
+  const closeModal = () => {
+    const m = document.getElementById('cookie-modal');
+    if (!m) return;
+    m.classList.add('cookie-modal-overlay--hiding');
+    document.body.classList.remove('cookie-modal-open');
+    setTimeout(() => m.remove(), 300);
+  };
+
+  const openModal = (initial) => {
+    if (document.getElementById('cookie-modal')) return;
+    const prev = initial || readConsent() || { statistics: false, external: false };
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'cookie-modal-overlay';
+    wrapper.id = 'cookie-modal';
+    wrapper.setAttribute('role', 'dialog');
+    wrapper.setAttribute('aria-modal', 'true');
+    wrapper.setAttribute('aria-label', 'Datenschutz-Einstellungen');
+
+    wrapper.innerHTML = [
+      '<div class="cookie-modal" role="document">',
+        '<div class="cookie-modal-header">',
+          '<p class="cookie-modal-eyebrow">Datenschutz</p>',
+          '<h2>Ihre Privatsphäre</h2>',
         '</div>',
-        '<div class="cookie-banner-actions">',
-          '<button type="button" class="cookie-btn-reject" id="cookie-reject">Ablehnen</button>',
-          '<button type="button" class="cookie-btn-accept" id="cookie-accept">Akzeptieren</button>',
+        '<div class="cookie-modal-body">',
+          '<p class="cookie-intro">Wir verwenden Cookies und ähnliche Technologien, um unsere Website funktional zu halten, Ihre Nutzungserfahrung zu verbessern und – mit Ihrer Zustimmung – Inhalte Dritter einzubinden. Sie können Ihre Auswahl jederzeit anpassen.</p>',
+          '<div class="cookie-category">',
+            '<div class="cookie-category-text">',
+              '<h3>Notwendig</h3>',
+              '<p>Technisch erforderlich für die Grundfunktionen dieser Website. Diese Cookies können nicht deaktiviert werden.</p>',
+            '</div>',
+            '<label class="cookie-toggle" aria-label="Notwendige Cookies (immer aktiv)">',
+              '<input type="checkbox" checked disabled />',
+              '<span class="cookie-toggle-slider"></span>',
+            '</label>',
+          '</div>',
+          '<div class="cookie-category">',
+            '<div class="cookie-category-text">',
+              '<h3>Statistik</h3>',
+              '<p>Anonyme Nutzungsdaten helfen uns, die Website stetig zu verbessern. Keine personalisierte Identifikation.</p>',
+            '</div>',
+            '<label class="cookie-toggle">',
+              '<input type="checkbox" data-category="statistics"' + (prev.statistics ? ' checked' : '') + ' />',
+              '<span class="cookie-toggle-slider"></span>',
+            '</label>',
+          '</div>',
+          '<div class="cookie-category">',
+            '<div class="cookie-category-text">',
+              '<h3>Externe Medien</h3>',
+              '<p>Erlaubt das Einbinden von Diensten Dritter wie Google Maps zur Standortanzeige.</p>',
+            '</div>',
+            '<label class="cookie-toggle">',
+              '<input type="checkbox" data-category="external"' + (prev.external ? ' checked' : '') + ' />',
+              '<span class="cookie-toggle-slider"></span>',
+            '</label>',
+          '</div>',
+          '<p class="cookie-modal-links"><a href="datenschutz.html">Datenschutzerklärung</a> · <a href="impressum.html">Impressum</a></p>',
+        '</div>',
+        '<div class="cookie-modal-actions">',
+          '<button type="button" class="cookie-btn cookie-btn-ghost" data-action="reject-all">Alle ablehnen</button>',
+          '<button type="button" class="cookie-btn cookie-btn-ghost" data-action="save">Auswahl speichern</button>',
+          '<button type="button" class="cookie-btn cookie-btn-primary" data-action="accept-all">Alle akzeptieren</button>',
         '</div>',
       '</div>',
     ].join('');
-    document.body.appendChild(banner);
 
-    const removeBanner = () => {
-      banner.classList.add('cookie-banner--hidden');
-      setTimeout(() => banner.remove(), 300);
+    document.body.appendChild(wrapper);
+    document.body.classList.add('cookie-modal-open');
+
+    const finalize = (c) => {
+      const saved = saveConsent(c);
+      closeModal();
+      applyConsent(saved);
     };
 
-    document.getElementById('cookie-accept').addEventListener('click', () => {
-      localStorage.setItem(CONSENT_KEY, 'accepted');
-      removeBanner();
-      loadGatedContent();
+    wrapper.querySelector('[data-action="accept-all"]').addEventListener('click', () => {
+      finalize({ statistics: true, external: true });
     });
-    document.getElementById('cookie-reject').addEventListener('click', () => {
-      localStorage.setItem(CONSENT_KEY, 'rejected');
-      removeBanner();
+    wrapper.querySelector('[data-action="reject-all"]').addEventListener('click', () => {
+      finalize({ statistics: false, external: false });
+    });
+    wrapper.querySelector('[data-action="save"]').addEventListener('click', () => {
+      finalize({
+        statistics: wrapper.querySelector('[data-category="statistics"]').checked,
+        external:   wrapper.querySelector('[data-category="external"]').checked,
+      });
     });
   };
 
-  if (consent === 'accepted') {
-    loadGatedContent();
-  } else if (consent !== 'rejected') {
-    // First visit — show banner
-    injectBanner();
+  // Exposed so footer link + map placeholder can reopen the modal
+  window.openCookieSettings = () => openModal();
+
+  const saved = readConsent();
+  if (!saved) {
+    openModal();
+  } else {
+    applyConsent(saved);
   }
-  // If rejected, stay silent — user can revoke via ?reset-cookies=1
 })();
