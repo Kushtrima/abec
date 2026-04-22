@@ -5,7 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
   <title>404 · Seite nicht gefunden — ABEC Fassadenbau GmbH</title>
-  <link rel="icon" type="image/png" href="/abec/assets/logo-abec.png" />
+
+  <!-- All relative paths resolve against this base.
+       When migrating to a custom domain at the root, change to <base href="/" />. -->
+  <base href="/abec/" />
+
+  <link rel="icon" type="image/png" href="assets/logo-abec.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -24,10 +29,10 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="/abec/css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body class="font-sans text-white antialiased bg-abec-black">
-  <main class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
+  <main id="main" class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
     <!-- Background accents -->
     <div class="absolute inset-0 pointer-events-none">
       <div class="absolute -top-32 -right-24 w-[28rem] h-[28rem] rounded-full bg-abec-red/25 blur-[140px]"></div>
@@ -35,8 +40,8 @@
     </div>
 
     <div class="relative z-10 max-w-xl mx-auto">
-      <a href="/abec/" aria-label="ABEC Fassadenbau – Startseite" class="inline-block mb-16">
-        <img src="/abec/assets/logo-abec.png" alt="ABEC Fassadenbau GmbH" class="h-12 w-auto" style="filter:brightness(0) invert(1);" />
+      <a href="./" aria-label="ABEC Fassadenbau – Startseite" class="inline-block mb-16">
+        <img src="assets/logo-abec.png" alt="ABEC Fassadenbau GmbH" class="notfound-logo h-12 w-auto" />
       </a>
       <p class="text-white/70 text-xs tracking-eyebrow uppercase font-medium mb-6 flex items-center justify-center gap-3">
         <span class="inline-block w-10 h-px bg-abec-red"></span>
@@ -53,13 +58,13 @@
         Die von Ihnen gesuchte Seite existiert nicht oder wurde verschoben. Kehren Sie zur Startseite zurück oder nehmen Sie Kontakt mit uns auf.
       </p>
       <div class="flex flex-wrap justify-center gap-2 sm:gap-4">
-        <a href="/abec/" class="btn-primary">
+        <a href="./" class="btn-primary">
           <span class="btn-label">Zurück zur Startseite</span>
           <span class="btn-icon">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
           </span>
         </a>
-        <a href="/abec/kontakt.html" class="btn-outline">Kontakt</a>
+        <a href="kontakt.html" class="btn-outline">Kontakt</a>
       </div>
     </div>
   </main>
