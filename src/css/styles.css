@@ -530,6 +530,13 @@ body.menu-open { overflow: hidden; }
 /* 404 page: invert logo on dark background */
 .notfound-logo { filter: brightness(0) invert(1); }
 
+/* Hero scroll indicator — subtle bounce to draw attention */
+.scroll-indicator svg { animation: scrollBounce 2.2s ease-in-out infinite; }
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(4px); }
+}
+
 /* ==========================================================================
    COOKIE CONSENT MODAL
    ========================================================================== */
