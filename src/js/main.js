@@ -51,7 +51,9 @@
   }
 
   // ---------- Reveal on scroll ----------
-  const revealEls = document.querySelectorAll('section > div, section h1, section h2, section article');
+  // Only animate actual content items (headings, articles, images) — NOT large
+  // wrapper divs. Wrappers staying at opacity:0 was hiding entire grids.
+  const revealEls = document.querySelectorAll('section h1, section h2, section article');
   if ('IntersectionObserver' in window && revealEls.length) {
     revealEls.forEach((el) => el.classList.add('reveal'));
 
@@ -64,12 +66,21 @@
           }
         });
       },
-      { threshold: 0.12, rootMargin: '0px 0px -60px 0px' }
+      { threshold: 0.05, rootMargin: '0px 0px -40px 0px' }
     );
 
     revealEls.forEach((el) => io.observe(el));
+
+    // Safety net: if anything is still hidden after 1.5s (prerender, screenshot
+    // tools, disabled JS features, etc.), force it visible so content never
+    // disappears for users.
+    setTimeout(() => {
+      document.querySelectorAll('.reveal:not(.is-visible)').forEach((el) => {
+        el.classList.add('is-visible');
+      });
+    }, 1500);
   } else {
-    // Fallback: just show everything
+    // No IntersectionObserver support — show everything immediately
     revealEls.forEach((el) => el.classList.add('is-visible'));
   }
 
